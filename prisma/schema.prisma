@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String        @id
+  name          String
+  email         String
+  emailVerified Boolean       @default(false)
+  image         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  tutorProfile  TutorProfile?
+  bookings      Booking[]     @relation("StudentBookings")
+  reviews       Review[]
+
+  role String? @default("STUDENT")
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model TutorProfile {
+  id         String    @id @default(uuid())
+  userId     String    @unique
+  bio        String?
+  hourlyRate Float
+  categoryId String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
+  bookings   Booking[] @relation("TutorBookings")
+  reviews    Review[]
+
+  @@index([categoryId])
+}
+
+model Category {
+  id        String         @id @default(uuid())
+  name      String         @unique
+  createdAt DateTime       @default(now())
+  tutor     TutorProfile[]
+
+}
+
+model Booking {
+  id        String       @id @default(uuid())
+  studentId String
+  tutorId   String
+  date      DateTime
+  createdAt DateTime     @default(now())
+  student   User         @relation("StudentBookings", fields: [studentId], references: [id])
+  tutor     TutorProfile @relation("TutorBookings", fields: [tutorId], references: [id])
+}
+
+model Review {
+  id        String       @id @default(uuid())
+  rating    Int
+  comment   String?
+  studentId String
+  tutorId   String
+  createdAt DateTime     @default(now())
+  student   User         @relation(fields: [studentId], references: [id])
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+
+}
+
+
