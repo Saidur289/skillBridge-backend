@@ -1,4 +1,4 @@
-import { betterAuth, string } from "better-auth";
+import { betterAuth, boolean, string } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 // If your Prisma file is located elsewhere, you can change the path
@@ -15,10 +15,16 @@ export const auth = betterAuth({
                 type: "string",
                 defaultValue: "STUDENT",
                 required: false
+            },
+            isBanned: {
+                type: "boolean",
+                defaultValue: false,
+                required: false
             }
         }
     },
     emailAndPassword: {
         enabled: true
-    }
+    },
+    trustedOrigins: [process.env.APP_URL!]
 });

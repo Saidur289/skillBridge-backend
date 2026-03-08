@@ -1,0 +1,6 @@
+-- CreateEnum
+CREATE TYPE "BookingStatus" AS ENUM ('PENDING', 'COMPLETED', 'CANCELED');
+
+-- AlterTable
+ALTER TABLE "Booking" ADD COLUMN     "status" "BookingStatus" NOT NULL DEFAULT 'PENDING',
+ALTER COLUMN "date" SET DEFAULT CURRENT_TIMESTAMP;
