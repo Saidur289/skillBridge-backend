@@ -1,7 +1,7 @@
 import { auth as betterAuth } from "../lib/auth"
 import { NextFunction, Request, Response } from "express";
 export enum UserRole {
-    USER = "STUDENT",
+    STUDENT = "STUDENT",
     TUTOR = "TUTOR",
     ADMIN = "ADMIN"
 }
@@ -23,7 +23,7 @@ const auth = (...roles: UserRole[]) => {
         const session = await betterAuth.api.getSession({
             headers: req.headers as any
         })
-        if (!session) {
+        if (session === null) {
             return res.status(401).json({ success: false, massage: "You are not authorized" })
         }
         req.user = {
