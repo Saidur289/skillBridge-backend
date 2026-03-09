@@ -6,6 +6,7 @@ import { auth } from "./lib/auth";
 import { tutorRoutes } from "./modules/tutor/tutor.routes";
 import errorHandler from "./middleware/errorHandler";
 import { adminRoutes } from "./modules/admin/admin.routes";
+import { studentRoutes } from "./modules/student/student.routes";
 const app = express()
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json())
@@ -18,6 +19,7 @@ app.use(
 );
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/tutor", tutorRoutes)
+app.use("/api/v1/student", studentRoutes)
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!')
 })

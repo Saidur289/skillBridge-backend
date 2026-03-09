@@ -124,6 +124,7 @@ model Booking {
   tutorId     String
   status      BookingStatus? @default(PENDING)
   sessionDate DateTime
+  sessionTime String
   createdAt   DateTime       @default(now())
   student     User           @relation("StudentBookings", fields: [studentId], references: [id])
   tutor       TutorProfile   @relation("TutorBookings", fields: [tutorId], references: [id])
