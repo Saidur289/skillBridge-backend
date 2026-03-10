@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { tutorService } from "./tutor.service";
+import { UserRole } from "../../middleware/auth";
 
 const createProfile = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -27,7 +28,30 @@ const createAvailability = async (req: Request, res: Response, next: NextFunctio
         next(error)
     }
 }
+const updateTutorProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = req.user
+        if (!user) return null
+        const result = await tutorService.updateTutorProfile(req.body, user.id)
+        res.status(200).json({ data: result, msg: "update profile successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
+const updateAvailability = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+        const result = await tutorService.updateAvailability(req.body, id as string)
+        if (!result) return res.status(401).json({ data: null, message: "already booked you cannot update it" })
+        res.status(200).json({ data: result, message: "update availability successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const tutorController = {
     createProfile,
-    createAvailability
+    createAvailability,
+    updateTutorProfile,
+    updateAvailability,
 }

@@ -115,6 +115,7 @@ model Availability {
   startTime String
   endTime   String
   tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+  bookings  Booking[]
 
 }
 
@@ -123,11 +124,13 @@ model Booking {
   studentId   String
   tutorId     String
   status      BookingStatus? @default(PENDING)
+  availabilityId String
   sessionDate DateTime
   sessionTime String
   createdAt   DateTime       @default(now())
   student     User           @relation("StudentBookings", fields: [studentId], references: [id])
   tutor       TutorProfile   @relation("TutorBookings", fields: [tutorId], references: [id])
+   availability   Availability @relation(fields: [availabilityId], references: [id])
 }
 
 model Review {
