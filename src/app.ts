@@ -8,6 +8,7 @@ import errorHandler from "./middleware/errorHandler";
 import { adminRoutes } from "./modules/admin/admin.routes";
 import { studentRoutes } from "./modules/student/student.routes";
 import { bookingRoutes } from "./modules/booking/booking.routes";
+import { reviewRoutes } from "./modules/review/review.routes";
 const app = express()
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json())
@@ -20,7 +21,8 @@ app.use(
 );
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/tutor", tutorRoutes)
-app.use("/api/v1/bookings", bookingRoutes)
+app.use("/api/v1/booking", bookingRoutes)
+app.use("/api/v1/review", reviewRoutes)
 app.use("/api/v1/student", studentRoutes)
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!')

@@ -123,7 +123,7 @@ model Booking {
   id          String         @id @default(uuid())
   studentId   String
   tutorId     String
-  status      BookingStatus? @default(PENDING)
+  status      BookingStatus? @default(CONFIRMED)
   availabilityId String
   sessionDate DateTime
   sessionTime String
@@ -131,6 +131,7 @@ model Booking {
   student     User           @relation("StudentBookings", fields: [studentId], references: [id])
   tutor       TutorProfile   @relation("TutorBookings", fields: [tutorId], references: [id])
    availability   Availability @relation(fields: [availabilityId], references: [id])
+   review Review?
 }
 
 model Review {
@@ -139,15 +140,17 @@ model Review {
   comment   String?
   studentId String
   tutorId   String
+  bookingId String @unique
   createdAt DateTime     @default(now())
   student   User         @relation(fields: [studentId], references: [id])
   tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id])
 
   @@unique([studentId, tutorId])
 }
 
 enum BookingStatus {
-  PENDING
+  CONFIRMED
   COMPLETED
   CANCELED
 }

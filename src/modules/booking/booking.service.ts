@@ -1,6 +1,6 @@
 import { Booking, BookingStatus } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { UserRole } from "../../middleware/auth";
+
 
 const createBookings = async (data: Booking) => {
     const sessionDate = new Date(data.sessionDate)

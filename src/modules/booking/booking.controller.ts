@@ -17,7 +17,7 @@ const getBookings = async (req: Request, res: Response, next: NextFunction) => {
         const user = req.user
         if (!user) return null
         const result = await bookingService.getBookings(user?.id as string)
-        res.status(200).json({ data: result, msg: "Get all booked session" })
+        res.status(200).json({ data: result, message: "Get all booked session" })
     } catch (error) {
         next(error)
     }
@@ -44,7 +44,7 @@ const getAllStudentAndTutorSession = async (req: Request, res: Response, next: N
         const isTutor = user.role === UserRole.TUTOR
         console.log(isTutor);
         const result = await bookingService.getAllStudentAndTutorSession(user.id, isTutor)
-        res.status(200).json({ data: result, msg: "view booked session successfully" })
+        res.status(200).json({ data: result, message: "view booked session successfully" })
     } catch (error) {
         next(error)
     }

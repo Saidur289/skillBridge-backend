@@ -33,7 +33,7 @@ const updateTutorProfile = async (req: Request, res: Response, next: NextFunctio
         const user = req.user
         if (!user) return null
         const result = await tutorService.updateTutorProfile(req.body, user.id)
-        res.status(200).json({ data: result, msg: "update profile successfully" })
+        res.status(200).json({ data: result, message: "update profile successfully" })
     } catch (error) {
         next(error)
     }
